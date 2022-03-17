@@ -1,8 +1,8 @@
 import { checkSquares } from "./squares.js";
+import { player, updatePlayer } from "./game.js";
 
 let gameBoard = document.getElementById("game-board");
 let context = gameBoard.getContext("2d");
-let turn = "p1";
 let createdLines = [];
 
 export function checkAvaliability(x1, y1, x2, y2) {
@@ -30,13 +30,11 @@ function drawLine(x1, y1, x2, y2) {
   context.moveTo(x1, y1);
   context.lineTo(x2, y2);
   context.lineWidth = 4;
-
-  if (turn === "p1") {
+  if (player === 1) {
     context.strokeStyle = "red";
-    turn = "p2";
   } else {
     context.strokeStyle = "blue";
-    turn = "p1";
   }
   context.stroke();
+  updatePlayer();
 }

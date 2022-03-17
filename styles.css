@@ -10,6 +10,7 @@ body {
 
 canvas {
   background: #f8f8f8;
+  border: black solid;
   padding: 0;
   margin: 0 auto;
   margin-bottom: 1rem;
@@ -20,10 +21,16 @@ canvas {
   text-align: center;
 }
 
-.player1 {
-  border-color: blue;
+.p1 {
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  font-size: x-large;
+  color: red;
 }
 
-.player2 {
-  border-color: red;
+.p2 {
+  text-align: center;
+  font-family: "Courier New", Courier, monospace;
+  font-size: x-large;
+  color: blue;
 }

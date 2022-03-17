@@ -1,8 +1,12 @@
-import { dots } from "./game.js";
+import { dots, sizeX, player, updatePlayer } from "./game.js";
+
+let gameBoard = document.getElementById("game-board");
+let context = gameBoard.getContext("2d");
 
 let squares = [];
 let lines = [];
 let gameOver = false;
+let [p1Score, p2Score] = [0, 0];
 
 export function createSquares(dotCoords) {
   //console.log(dotCoords);
@@ -47,12 +51,47 @@ export function checkSquares(x1, y1, x2, y2) {
         )
       ) {
         squares[square][4] = true;
-        console.log("square!");
+
+        let subset = squares[square].slice(0, -1);
+
+        let smallestCoord = {
+          x: Number.MAX_SAFE_INTEGER,
+          y: Number.MAX_SAFE_INTEGER,
+        };
+
+        //determining the smallest coordinate pair (top left for rect drawing)
+        for (const coord in subset) {
+          const from = subset[coord].from.x + subset[coord].from.y;
+          const to = subset[coord].to.x + subset[coord].to.y;
+          if (smallestCoord.x + smallestCoord.y > from) {
+            if (from < to) {
+              smallestCoord = subset[coord].from;
+            } else {
+              smallestCoord = subset[coord].to;
+            }
+          }
+        }
+
+        console.log(smallestCoord);
+
+        finaliseSquare(smallestCoord.x, smallestCoord.y);
         checkGameOver();
-        break;
       }
     }
   }
+}
+
+function finaliseSquare(upLeftX, upLeftY) {
+  //call update player to give the square collecting player another turn
+  updatePlayer();
+  if (player === 1) {
+    document.getElementById("p1").innerHTML = "Player 1: " + ++p1Score;
+    context.fillStyle = "rgba(255, 0, 0, 0.5)"; //red
+  } else {
+    document.getElementById("p2").innerHTML = "Player 2: " + ++p2Score;
+    context.fillStyle = "rgba(0, 0, 255, 0.5)"; //blue
+  }
+  context.fillRect(upLeftX, upLeftY, sizeX, sizeX);
 }
 
 function checkGameOver() {

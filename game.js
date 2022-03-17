@@ -4,11 +4,13 @@ import { createSquares } from "./squares.js";
 let gameBoard = document.getElementById("game-board");
 let context = gameBoard.getContext("2d");
 
-export const dots = 3;
+export const dots = 4;
 export let dotCoords = [];
 
-let sizeX = gameBoard.width / dots;
-let sizeY = gameBoard.height / dots;
+export let player = 1;
+
+export const sizeX = gameBoard.width / dots;
+const sizeY = gameBoard.height / dots;
 
 //create the dots and put the coordinates into an array
 for (let i = 0; i < dots; i++) {
@@ -124,5 +126,15 @@ function getLineLocation(mouseCursorX, mouseCursorY) {
         }
       }
     }
+  }
+}
+
+export function updatePlayer() {
+  if (player === 1) {
+    player = 2;
+    return "red";
+  } else {
+    player = 1;
+    return "blue";
   }
 }
