@@ -1,10 +1,12 @@
 import { checkAvaliability } from "./plot_lines.js";
-import { createSquares } from "./squares.js";
+import { squares, createSquares } from "./squares.js";
 
 let gameBoard = document.getElementById("game-board");
 let context = gameBoard.getContext("2d");
 
-export const dots = 4;
+let gameOver = false;
+
+export const dots = 5;
 export let dotCoords = [];
 
 export let player = 1;
@@ -127,6 +129,7 @@ function getLineLocation(mouseCursorX, mouseCursorY) {
       }
     }
   }
+  checkGameOver();
 }
 
 export function updatePlayer() {
@@ -136,5 +139,13 @@ export function updatePlayer() {
   } else {
     player = 1;
     return "blue";
+  }
+}
+
+export function checkGameOver() {
+  //squares array [4] shows if square has been filled or not
+  gameOver = squares.every((el) => el[4] === true);
+  if (gameOver) {
+    alert("Game Over!");
   }
 }

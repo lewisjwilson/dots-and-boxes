@@ -3,9 +3,8 @@ import { dots, sizeX, player, updatePlayer } from "./game.js";
 let gameBoard = document.getElementById("game-board");
 let context = gameBoard.getContext("2d");
 
-let squares = [];
+export let squares = [];
 let lines = [];
-let gameOver = false;
 let [p1Score, p2Score] = [0, 0];
 
 export function createSquares(dotCoords) {
@@ -32,6 +31,8 @@ export function checkSquares(x1, y1, x2, y2) {
   const line = { from: { x: x1, y: y1 }, to: { x: x2, y: y2 } };
 
   lines.push(line);
+
+  var squaresToFinalise = [];
 
   for (const square in squares) {
     ///squares[square][4] is true if square has been filled
@@ -71,33 +72,29 @@ export function checkSquares(x1, y1, x2, y2) {
             }
           }
         }
-
-        console.log(smallestCoord);
-
-        finaliseSquare(smallestCoord.x, smallestCoord.y);
-        checkGameOver();
+        squaresToFinalise.push({ x: smallestCoord.x, y: smallestCoord.y });
       }
     }
   }
+  finaliseSquares(squaresToFinalise);
+  squaresToFinalise = [];
 }
 
-function finaliseSquare(upLeftX, upLeftY) {
-  //call update player to give the square collecting player another turn
-  updatePlayer();
-  if (player === 1) {
-    document.getElementById("p1").innerHTML = "Player 1: " + ++p1Score;
-    context.fillStyle = "rgba(255, 0, 0, 0.5)"; //red
-  } else {
-    document.getElementById("p2").innerHTML = "Player 2: " + ++p2Score;
-    context.fillStyle = "rgba(0, 0, 255, 0.5)"; //blue
+function finaliseSquares(squaresToFinalise) {
+  for (const square in squaresToFinalise) {
+    const upLeftX = squaresToFinalise[square].x;
+    const upLeftY = squaresToFinalise[square].y;
+    //call update player to give the square collecting player another turn
+    if (player === 1) {
+      document.getElementById("p1").innerHTML = "Player 1: " + ++p1Score;
+      context.fillStyle = "rgba(255, 0, 0, 0.5)"; //red
+    } else {
+      document.getElementById("p2").innerHTML = "Player 2: " + ++p2Score;
+      context.fillStyle = "rgba(0, 0, 255, 0.5)"; //blue
+    }
+    context.fillRect(upLeftX, upLeftY, sizeX, sizeX);
   }
-  context.fillRect(upLeftX, upLeftY, sizeX, sizeX);
-}
-
-function checkGameOver() {
-  //squares array [4] shows if square has been filled or not
-  gameOver = squares.every((el) => el[4] === true);
-  if (gameOver) {
-    alert("Game Over!");
+  if (squaresToFinalise % 2 === 0) {
+    updatePlayer();
   }
 }
