@@ -5,7 +5,7 @@ let context = gameBoard.getContext("2d");
 
 export let squares = [];
 let lines = [];
-let [p1Score, p2Score] = [0, 0];
+export let [p1Score, p2Score] = [0, 0];
 
 export function createSquares(dotCoords) {
   //console.log(dotCoords);

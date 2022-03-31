@@ -1,12 +1,13 @@
 import { checkAvaliability } from "./plot_lines.js";
-import { squares, createSquares } from "./squares.js";
+import { p1Score, p2Score, squares, createSquares } from "./squares.js";
 
 let gameBoard = document.getElementById("game-board");
 let context = gameBoard.getContext("2d");
+document.getElementById("turnP2").style.display = "none";
 
 let gameOver = false;
 
-export const dots = 5;
+export const dots = 3;
 export let dotCoords = [];
 
 export let player = 1;
@@ -45,7 +46,7 @@ gameBoard.addEventListener("mousedown", function (e) {
 function getLineLocation(mouseCursorX, mouseCursorY) {
   for (let i = 0; i < dots; i++) {
     if (mouseCursorX > dotCoords[i].x && mouseCursorX < dotCoords[i + 1].x) {
-      for (let j = 0; j < dots ** 2; j += dots) {
+      for (let j = 0; j < dots ** 2 - dots; j += dots) {
         if (
           mouseCursorY > dotCoords[j].y &&
           mouseCursorY < dotCoords[j + dots].y
@@ -129,14 +130,22 @@ function getLineLocation(mouseCursorX, mouseCursorY) {
       }
     }
   }
-  checkGameOver();
+
+  //insert 200ms to let draw a line before checking if the game is over
+  new Promise(function (resolve) {
+    setTimeout(() => resolve(checkGameOver()), 200);
+  });
 }
 
 export function updatePlayer() {
   if (player === 1) {
+    document.getElementById("turnP1").style.display = "none";
+    document.getElementById("turnP2").style.display = "block";
     player = 2;
     return "red";
   } else {
+    document.getElementById("turnP1").style.display = "block";
+    document.getElementById("turnP2").style.display = "none";
     player = 1;
     return "blue";
   }
@@ -146,6 +155,14 @@ export function checkGameOver() {
   //squares array [4] shows if square has been filled or not
   gameOver = squares.every((el) => el[4] === true);
   if (gameOver) {
-    alert("Game Over!");
+    let winner = "Player 1 is the winner!!";
+    if (p2Score > p1Score) {
+      winner = "Player 2 is the winner!!";
+    } else if (p1Score === p2Score) {
+      winner = "The game is a draw!!";
+    }
+    if (confirm(winner + "\nWould you like to play again?")) {
+      window.location.reload();
+    }
   }
 }

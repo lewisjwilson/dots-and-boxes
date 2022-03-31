@@ -1,5 +1,5 @@
 import { checkSquares } from "./squares.js";
-import { player, updatePlayer } from "./game.js";
+import { player } from "./game.js";
 
 let gameBoard = document.getElementById("game-board");
 let context = gameBoard.getContext("2d");
