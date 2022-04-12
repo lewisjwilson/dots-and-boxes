@@ -7,7 +7,7 @@ document.getElementById("turnP2").style.display = "none";
 
 let gameOver = false;
 
-export const dots = 3;
+export const dots = 4;
 export let dotCoords = [];
 
 export let player = 1;
